@@ -1,24 +1,15 @@
-# optimizers/non_differentiable.py
-
 import numpy as np
 from numpy import ndarray
 from typing import Callable, list, tuple, Literal
-
-# Import the base classes from your utils folder
 from utils.base import Optim, EPS
 
-# =============================================================================
-# 1. Sub-gradient Method
-# =============================================================================
 
 class SubGradientMethod(Optim):
     """
     Implementation of the Sub-gradient Method.
-
     This optimizer is designed for non-differentiable convex functions.
     It uses a sub-gradient (g) instead of a gradient at points
     where the function is not differentiable.
-    
     Key characteristics:
     - It is not a descent method; an update can increase the function value.
     - It typically runs for a fixed number of iterations.
@@ -45,12 +36,10 @@ class SubGradientMethod(Optim):
         return
 
     def _reset(self) -> None:
-        """Resets the iteration count."""
         super()._reset()
         return
 
     def _get_alpha(self, k: int) -> float:
-        """Calculates the step size for iteration k based on the policy."""
         if self.policy == 'fixed':
             return self.alpha_init
         elif self.policy == 'diminishing':
@@ -60,11 +49,6 @@ class SubGradientMethod(Optim):
             raise ValueError(f"Unknown step size policy: {self.policy}")
 
     def _next(self, *args, **kwargs) -> ndarray:
-        """
-        _next is not used in this optimizer, as the logic is
-        self-contained within the `optimize` loop to handle
-        step size calculation and f_best tracking.
-        """
         pass
 
     def optimize(
@@ -75,32 +59,15 @@ class SubGradientMethod(Optim):
         hessian_func_callback: Callable[[ndarray], ndarray] | None = None,
         is_plot: bool = False,
     ) -> ndarray | tuple[ndarray, list[ndarray]]:
-        """
-        Runs the iterative Sub-gradient Method process.
-
-        Note: `grad_func_callback` must be a function `g(x)` that
-        returns *a* valid sub-gradient at `x`.
-        """
         plot_points: list[ndarray] = [x]
-        
-        # Sub-gradient method is not a descent method, so we must
-        # track the best solution found so far .
         x_best = x.copy()
         f_best = func_callback(x)
 
         for k in range(self.n_iterations):
-            self.num_iter = k + 1 # Update iteration count
-
-            # 1. Calculate step size for this iteration
+            self.num_iter = k + 1 
             alpha_k = self._get_alpha(k)
-            
-            # 2. Compute *a* sub-gradient g(k) at x(k)
             g_k = grad_func_callback(x)
-            
-            # 3. Update position: x(k+1) = x(k) - alpha(k) * g(k)
             x = x - alpha_k * g_k
-            
-            # 4. Check if this new position is the best so far
             f_new = func_callback(x)
             if f_new < f_best:
                 f_best = f_new
@@ -110,8 +77,6 @@ class SubGradientMethod(Optim):
                 plot_points.append(x)
 
         self._reset()
-        
-        # Return the best solution found, not necessarily the last one
         if is_plot:
             return x_best, plot_points
         return x_best

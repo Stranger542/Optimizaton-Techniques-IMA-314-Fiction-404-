@@ -44,7 +44,6 @@ class Optim(ABC):
         self.num_iter = 0
         return
 
-
 class Function:
     """
     A wrapper class for mathematical functions.
@@ -93,8 +92,6 @@ class Function:
         """
         if self.__grad_func:
             return self.__grad_func(x)
-
-        # Numerical gradient (central difference) for 2D functions
         _x, _y = x
         df_dx = (
             self.__func(np.array([_x + EPS, _y]))
@@ -115,8 +112,6 @@ class Function:
         """
         if self.__hessian_func:
             return self.__hessian_func(x)
-
-        # Numerical Hessian (finite difference) for 2D functions
         _x, _y = x
         d2f_dx2 = (
             self.__func(np.array([_x + EPS, _y]))
@@ -144,26 +139,20 @@ class Function:
     ) -> ndarray:
         """
         Optimizes this function using a given optimizer.
-
         Args:
             initial_val (ndarray): The starting point for the optimization.
             optim (Optim): An instance of an optimizer (e.g., GradientDescent).
             is_plot (bool): Whether to plot the optimization trajectory.
-
         Returns:
             ndarray: The optimized solution.
         """
-        # Pass this function's methods as callbacks to the optimizer
         soln = optim.optimize(
             initial_val, self.__call__, self.grad, self.hessian, is_plot=is_plot
         )
-
         if is_plot and isinstance(soln, tuple):
-            # If plotting, `soln` is (final_x, history_list)
             self.plot(points=soln[1])
             assert isinstance(soln[0], ndarray)
-            return soln[0]  # Return just the final solution
-
+            return soln[0] 
         assert isinstance(soln, ndarray), "Value received from Optim is corrupted"
         return soln
 
@@ -178,7 +167,6 @@ class Function:
         """
         Plots a 3D surface of the function and optionally an 
         optimizer's trajectory.
-        
         Args:
             points (list[ndarray], optional): A list of points in the trajectory.
             x_range (tuple, optional): The x-axis range to plot.
@@ -188,7 +176,6 @@ class Function:
         """
 
         if points is not None and len(points) > 0:
-            # Auto-adjust plot range based on trajectory
             points_array = np.array(points)
             x_range = (np.min(points_array[:, 0]) - 1, np.max(points_array[:, 0]) + 1)
             y_range = (np.min(points_array[:, 1]) - 1, np.max(points_array[:, 1]) + 1)
@@ -196,8 +183,6 @@ class Function:
         x = np.linspace(x_range[0], x_range[1], num_points)
         y = np.linspace(y_range[0], y_range[1], num_points)
         X, Y = np.meshgrid(x, y)
-
-        # Vectorized evaluation if possible, otherwise list comprehension
         try:
             Z = self.__call__(np.array([X, Y]))
         except ValueError:
@@ -210,8 +195,6 @@ class Function:
 
         fig = plt.figure(figsize=(12, 8))
         ax = fig.add_subplot(111, projection="3d")
-
-        # Plot the surface
         surf = ax.plot_surface(
             X,
             Y,
@@ -223,12 +206,10 @@ class Function:
             antialiased=True,
             alpha=0.8,
         )
-
-        # Plot the trajectory
         if points is not None and len(points) > 0:
             x_points = np.array([p[0] for p in points])
             y_points = np.array([p[1] for p in points])
-            z_points = np.array([self.__call__(p) for p in points]) + 1e-3 # Offset for visibility
+            z_points = np.array([self.__call__(p) for p in points]) + 1e-3 
 
             ax.plot(
                 x_points,
@@ -256,11 +237,9 @@ class Algo(ABC):
     """
     Abstract Base Class for Machine Learning Algorithms
     that use an optimizer (e.g., Linear Regression).
-
     This class uses *composition*, holding an instance of an
     `Optim` object to perform its training.
     """
-
     @abstractmethod
     def __init__(self, optim: Optim, *args, **kwargs) -> None:
         """
