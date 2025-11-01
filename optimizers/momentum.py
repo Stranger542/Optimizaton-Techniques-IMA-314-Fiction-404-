@@ -1,6 +1,6 @@
 import numpy as np
 from numpy import ndarray
-from typing import Callable, list, tuple
+from typing import Callable, List, Tuple
 from utils.base import Optim, EPS
 
 class MomentumGradientDescent(Optim):
@@ -122,7 +122,6 @@ class NesterovGradientDescent(Optim):
         3. v(k) = gamma * v(k-1) + alpha * g_lookahead 
         4. x(k+1) = x(k) - v(k) 
         """
-        
         # Compute look-ahead position
         x_lookahead = x - self.gamma * self.v
         # Compute gradient at look-ahead position

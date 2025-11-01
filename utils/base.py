@@ -4,7 +4,7 @@ from abc import abstractmethod, ABC
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib
-from typing import Callable, list, tuple, Any
+from typing import Callable, List, Tuple, Any
 
 EPS = 1e-6
 

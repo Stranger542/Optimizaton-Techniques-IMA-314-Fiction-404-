@@ -1,8 +1,7 @@
 import numpy as np
 from numpy import ndarray
-from typing import Callable, list, tuple, Literal
+from typing import Callable, List, Tuple, Literal
 from utils.base import Optim, EPS
-
 
 class SubGradientMethod(Optim):
     """

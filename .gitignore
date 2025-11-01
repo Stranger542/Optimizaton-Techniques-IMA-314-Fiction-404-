@@ -1,0 +1,22 @@
+# Python Virtual Environment
+# Ignores your entire .venv folder
+/.venv/
+
+# Python Cache Files
+# Ignores all __pycache__ folders and .pyc files
+__pycache__/
+*.pyc
+
+# Jupyter Notebook Checkpoints
+# Ignores the hidden checkpoint files notebooks create
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# IDE / Editor Configuration
+# Ignores VS Code and PyCharm specific files
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
