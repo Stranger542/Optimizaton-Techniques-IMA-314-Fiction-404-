@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy import ndarray
-from typing import List, Callable, Dict, Any
+from typing import Callable, Dict, Any
 
 def plot_loss_curves(
-    histories: Dict[str, List[ndarray]], 
+    histories: Dict[str, list[ndarray]], 
     loss_func_callable: Callable[..., float],
     is_log_scale: bool = True
 ):
@@ -43,7 +43,7 @@ def plot_loss_curves(
 
 def plot_contour_comparison(
     func_callable: Callable[[ndarray], float],
-    histories: Dict[str, List[ndarray]], 
+    histories: Dict[str, list[ndarray]], 
     x_range: tuple[float, float] = (-2, 2),
     y_range: tuple[float, float] = (-2, 2),
     title: str = "Optimizer Path Comparison"

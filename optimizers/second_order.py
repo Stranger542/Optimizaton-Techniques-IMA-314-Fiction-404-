@@ -1,6 +1,6 @@
 import numpy as np
 from numpy import ndarray
-from typing import Callable, List, Tuple
+from typing import Callable
 from utils.base import Optim, EPS
 
 class NewtonMethodBase(Optim):
@@ -87,7 +87,7 @@ class NewtonMethod(NewtonMethodBase):
     exact Hessian.
     This method is very fast (quadratic convergence) near the
     optimum but can be unstable if the Hessian is not
-    positive definite (i.e., not convex)[cite: 1990].
+    positive definite (i.e., not convex).
     """
 
     def __init__(self, line_search: Optim | None = None) -> None:
@@ -106,9 +106,9 @@ class DampedNewtonMethod(NewtonMethodBase):
     """
     Implementation of the Damped Newton's Method.
     This is a modification to make Newton's method more robust
-    when the Hessian `H` is not positive definite[cite: 1990, 2014].
+    when the Hessian `H` is not positive definite.
     It solves a modified system: `(H + lambda*I) * delta = -g`,
-    where `lambda` is a "damping factor" [cite: 2014] that ensures
+    where `lambda` is a "damping factor" that ensures
     the modified Hessian is positive definite and well-conditioned.
     Args:
         line_search (Optim, optional): An optimizer for line search.

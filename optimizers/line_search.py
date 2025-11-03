@@ -1,7 +1,6 @@
-
 import numpy as np
 from numpy import ndarray
-from typing import Callable, List, Tuple
+from typing import Callable
 from utils.base import Optim, EPS
 
 class BacktrackingLineSearch(Optim):
@@ -11,13 +10,13 @@ class BacktrackingLineSearch(Optim):
     by other optimizers (like GradientDescent, Newton, BFGS) to determine
     an appropriate step size `alpha` at each iteration.
     It finds an `alpha` that satisfies the sufficient decrease condition
-    (Armijo rule) [cite: 1761, 1776, 1807-1808]:
+    (Armijo rule):
         f(x + alpha * d) <= f(x) + c1 * alpha * (grad(x).T @ d)
 
     Args:
-        alpha_init (float): The initial (largest) step size to try[cite: 1795].
-        beta (float): The shrinking factor to reduce alpha (0 < beta < 1)[cite: 1796].
-        c1 (float): The constant for the Armijo condition (0 < c1 < 1)[cite: 1796].
+        alpha_init (float): The initial (largest) step size to try.
+        beta (float): The shrinking factor to reduce alpha (0 < beta < 1).
+        c1 (float): The constant for the Armijo condition (0 < c1 < 1).
     """
 
     def __init__(self, alpha_init: float = 1.0, beta: float = 0.5, c1: float = 1e-4) -> None:
@@ -78,7 +77,7 @@ class BacktrackingLineSearch(Optim):
 class WolfeLineSearch(Optim):
     """
     Placeholder for a line search using the Wolfe Conditions.
-    The Wolfe conditions [cite: 1738] combine the Armijo rule (sufficient decrease)
+    The Wolfe conditions combine the Armijo rule (sufficient decrease)
     with a curvature condition (the second Wolfe condition) to ensure
     the step size is not too small.
     This is more complex to implement and is not fully detailed in the

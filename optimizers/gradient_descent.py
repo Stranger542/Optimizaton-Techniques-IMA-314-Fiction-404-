@@ -1,6 +1,6 @@
 import numpy as np
 from numpy import ndarray
-from typing import Callable, List, Tuple
+from typing import Callable
 from utils.base import Optim, EPS
 
 class GradientDescent(Optim):

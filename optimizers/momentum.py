@@ -1,6 +1,6 @@
 import numpy as np
 from numpy import ndarray
-from typing import Callable, List, Tuple
+from typing import Callable
 from utils.base import Optim, EPS
 
 class MomentumGradientDescent(Optim):
@@ -12,7 +12,7 @@ class MomentumGradientDescent(Optim):
     Args:
         alpha (float): The learning rate (e.g., 0.01).
         gamma (float): The momentum coefficient (e.g., 0.9), which
-                       [cite_start]controls the decay of the velocity[cite: 2616].
+                       controls the decay of the velocity.
     """
 
     def __init__(self, alpha: float = 0.01, gamma: float = 0.9) -> None:

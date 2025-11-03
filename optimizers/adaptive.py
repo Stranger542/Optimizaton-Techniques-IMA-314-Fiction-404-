@@ -1,6 +1,6 @@
 import numpy as np
 from numpy import ndarray
-from typing import Callable, List, Tuple
+from typing import Callable
 from utils.base import Optim, EPS
 
 class Adagrad(Optim):
@@ -79,7 +79,7 @@ class RMSProp(Optim):
     by using an *Exponentially Weighted Moving Average (EWMA)*
     for the squared gradients, rather than a simple sum.
     Args:
-        alpha (float): The learning rate[cite: 802].
+        alpha (float): The learning rate.
         beta (float): The smoothing parameter for the EWMA (e.g., 0.9).
         epsilon (float): A small value for numerical stability.
     """
