@@ -8,7 +8,7 @@ class MomentumGradientDescent(Optim):
     Implementation of Gradient Descent with Momentum (MGD).
     This optimizer accelerates GD by adding a "velocity" term (`v`)
     that accumulates past gradients, helping to smooth out oscillations
-    and build speed in the correct direction .
+    and build speed in the correct direction.
     Args:
         alpha (float): The learning rate (e.g., 0.01).
         gamma (float): The momentum coefficient (e.g., 0.9), which
@@ -35,14 +35,17 @@ class MomentumGradientDescent(Optim):
     def _next(
         self, 
         x: ndarray, 
-        grad_func_callback: Callable[[ndarray], ndarray]
+        gradient: ndarray
     ) -> ndarray:
         """
         Calculates the next position using the Momentum GD update equations.
         v(k) = gamma * v(k-1) + alpha * grad(x(k))
         x(k+1) = x(k) - v(k) 
         """
-        gradient = grad_func_callback(x)
+        # Initialize velocity if None
+        if self.v is None:
+            self.v = np.zeros_like(x)
+        
         self.v = self.gamma * self.v + self.alpha * gradient
         x_next = x - self.v
         return x_next
@@ -66,20 +69,36 @@ class MomentumGradientDescent(Optim):
         Returns:
             The final optimized solution `x` or (solution, history).
         """
-        plot_points: list[ndarray] = [x]
+        self.num_iter = 0  # Reset iteration count at the beginning
+        plot_points: list[ndarray] = [x.copy()]
+        
+        # Initialize velocity
         if self.v is None:
             self.v = np.zeros_like(x)
-        while np.linalg.norm(grad_func_callback(x)) > EPS:
+        
+        g = grad_func_callback(x)  # Get initial gradient
+        
+        while np.linalg.norm(g) > EPS:
             self.num_iter += 1
-            x = self._next(x, grad_func_callback)
+            x = self._next(x, g)
+            g = grad_func_callback(x)  # Get new gradient for next check
 
             if is_plot:
-                plot_points.append(x)
+                plot_points.append(x.copy())
+            
+            if self.num_iter > 50000:
+                print(f"Warning: {self.__class__.__name__} reached max iterations.")
+                break
 
+        # Store iter count before resetting state
+        final_iter_count = self.num_iter
         self._reset()
+        self.num_iter = final_iter_count  # Restore it for printing
+
         if is_plot:
             return x, plot_points
         return x
+
 
 class NesterovGradientDescent(Optim):
     """
@@ -87,7 +106,7 @@ class NesterovGradientDescent(Optim):
     This optimizer improves upon Momentum by calculating the gradient
     at a "look-ahead" position (where the velocity is about to take it)
     rather than at the current position. This "corrects" the
-    velocity vector before the update .
+    velocity vector before the update.
 
     Args:
         alpha (float): The learning rate (e.g., 0.01).
@@ -122,6 +141,10 @@ class NesterovGradientDescent(Optim):
         3. v(k) = gamma * v(k-1) + alpha * g_lookahead 
         4. x(k+1) = x(k) - v(k) 
         """
+        # Initialize velocity if None
+        if self.v is None:
+            self.v = np.zeros_like(x)
+        
         # Compute look-ahead position
         x_lookahead = x - self.gamma * self.v
         # Compute gradient at look-ahead position
@@ -154,17 +177,32 @@ class NesterovGradientDescent(Optim):
         Returns:
             The final optimized solution `x` or (solution, history).
         """
-        plot_points: list[ndarray] = [x]
+        self.num_iter = 0  # Reset iteration count at the beginning
+        plot_points: list[ndarray] = [x.copy()]
+        
+        # Initialize velocity
         if self.v is None:
             self.v = np.zeros_like(x)
-        while np.linalg.norm(grad_func_callback(x)) > EPS:
+        
+        g = grad_func_callback(x)  # Get initial gradient
+        
+        while np.linalg.norm(g) > EPS:
             self.num_iter += 1
             x = self._next(x, grad_func_callback)
+            g = grad_func_callback(x)  # Get new gradient for next check
 
             if is_plot:
-                plot_points.append(x)
+                plot_points.append(x.copy())
+            
+            if self.num_iter > 50000:
+                print(f"Warning: {self.__class__.__name__} reached max iterations.")
+                break
 
+        # Store iter count before resetting state
+        final_iter_count = self.num_iter
         self._reset()
+        self.num_iter = final_iter_count  # Restore it for printing
+
         if is_plot:
             return x, plot_points
         return x
