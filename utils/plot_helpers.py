@@ -87,3 +87,54 @@ def plot_contour_comparison(
     plt.axhline(0, color='black', linewidth=0.5, zorder=1)
     plt.axvline(0, color='black', linewidth=0.5, zorder=1)
     plt.show()
+    
+
+def plot_decision_boundary(
+    model: Callable, 
+    X: ndarray, 
+    Y: ndarray, 
+    title: str = "Decision Boundary"
+):
+    """
+    Plots the decision boundary for a binary classification model.
+    Only works for 2D feature data.
+
+    Args:
+        model: A trained model object that has a `.predict()` method.
+        X (ndarray): The feature data (N x 2).
+        Y (ndarray): The true labels (N x 1).
+        title (str): The title for the plot.
+    """
+    if X.shape[1] != 2:
+        print("Warning: Cannot plot decision boundary for non-2D data. Skipping plot.")
+        return
+
+    plt.figure(figsize=(10, 6))
+    
+    # Create a mesh grid
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.02),
+                       np.arange(y_min, y_max, 0.02))
+    
+    # Get predictions for the entire grid
+    grid_data = np.c_[xx.ravel(), yy.ravel()]
+    Z = model.predict(grid_data)
+    Z = Z.reshape(xx.shape)
+    
+    # Plot the contour (the decision boundary)
+    plt.contourf(xx, yy, Z, alpha=0.3, cmap=plt.cm.RdYlBu)
+    
+    # Plot the data points
+    Y_flat = Y.flatten()
+    plt.scatter(X[Y_flat == 0][:, 0], X[Y_flat == 0][:, 1], 
+                c='blue', label='Class 0', edgecolors='k', alpha=0.7)
+    plt.scatter(X[Y_flat == 1][:, 0], X[Y_flat == 1][:, 1], 
+                c='red', label='Class 1', edgecolors='k', alpha=0.7)
+    
+    plt.xlabel("Feature 1")
+    plt.ylabel("Feature 2")
+    plt.title(title)
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.show()

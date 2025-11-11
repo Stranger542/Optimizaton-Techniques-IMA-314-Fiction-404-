@@ -173,3 +173,40 @@ def linear_regression_gradient(W: ndarray, X: ndarray, Y: ndarray) -> ndarray:
     E = X @ W - Y
     gradient = (1 / N) * X.T @ E
     return gradient.flatten() 
+
+
+def generate_logistic_regression_data(N: int = 200, d: int = 2):
+    """
+    Generates synthetic 2D data for binary classification.
+    
+    Creates two distinct "blobs" of data points.
+    
+    Args:
+        N (int): Total number of data points.
+        d (int): Number of features (must be 2 for this function).
+        
+    Returns:
+        tuple: (X, Y)
+            X (ndarray): Feature matrix (N x d)
+            Y (ndarray): Target vector (N x 1)
+    """
+    if d != 2:
+        raise ValueError("This specific generator only supports d=2.")
+        
+    N_per_class = N // 2
+    
+    # Class 0: Centered at (-2, -2)
+    X_0 = np.random.randn(N_per_class, d) + np.array([-2, -2])
+    Y_0 = np.zeros((N_per_class, 1))
+    
+    # Class 1: Centered at (2, 2)
+    X_1 = np.random.randn(N_per_class, d) + np.array([2, 2])
+    Y_1 = np.ones((N_per_class, 1))
+    
+    # Concatenate and shuffle
+    X = np.vstack([X_0, X_1])
+    Y = np.vstack([Y_0, Y_1])
+    
+    permutation = np.random.permutation(N)
+    
+    return X[permutation], Y[permutation]

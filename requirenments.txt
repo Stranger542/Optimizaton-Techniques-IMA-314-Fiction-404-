@@ -2,3 +2,6 @@ numpy
 matplotlib
 jupyter
 scipy
+cvxpy
+pandas
+scikit-learn
