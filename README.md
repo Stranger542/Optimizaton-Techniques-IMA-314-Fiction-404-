@@ -9,6 +9,7 @@ This repository contains the **core Python code** for each algorithm along with 
 
 - **Sumit Hulke** (2023BCD0026)  
 - **Suraj Sanjay Harlekar** (2023BCD0038)
+- **Aryan Patil** (2023BCD0047)
 
 ---
 
@@ -58,9 +59,19 @@ The project separates:
   - **Armijo Condition**
   - **Backtracking Line Search**
 
-### 7. Linear Programming (Conceptual)
-- **Simplex Method**  
-- **Interior Point Methods**
+### 7. Regression_Models
+- **Linear regression**  
+  - **Baseline supervised learning model for continuous prediction.**
+  - **Dataset Used: California Housing**
+- **Ridge Regression (L2)**
+  - **linear regression with L2 penalty to reduce overfitting.**
+  - **Dataset Used: California Housing**
+- **Lasso Regression (L1)**
+  - **Adds an L1 penalty that increases sparsity**
+  - **Dataset Used: California Housing**
+- **Logistic Regression**
+  - **Classification using sigmoid function.**
+  - **Dataset Used: Breast Cancer Wisconsin Dataset**
 
 ---
 
@@ -85,10 +96,11 @@ Optimization_Project/
 │   ├── 04_Second_Order_Methods.ipynb   # Demos for Newton
 │   ├── 05_Quasi_Newton_Methods.ipynb   # Demos for BFGS, L-BFGS
 │   └── 06_Subgradient_Method.ipynb     # Demo for Lasso
+│   └── Regression_Models.ipynb 
 │
 ├── utils/
 │   ├── __init__.py
-│   ├── test_functions.py               # Defines test functions and gradients
+│   ├── test_functions.py               # Defines test functions and  gradients
 │   └── plot_helpers.py                 # Common plotting utilities
 │
 ├── requirements.txt                    # Dependencies

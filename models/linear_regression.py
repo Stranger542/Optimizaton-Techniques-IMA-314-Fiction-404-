@@ -201,3 +201,64 @@ class LassoRegression(LinearRegressionBase):
         l1_subgrad[0] = 0 # Don't penalize bias
         
         return mse_grad + l1_subgrad
+    
+
+    def train(self, X_train: ndarray, Y_train: ndarray, optim: Optim, is_plot: bool = False) -> None:
+
+        # --- Ensure correct optimizer ---
+        from optimizers.non_differentiable import SubGradientMethod
+        if not isinstance(optim, SubGradientMethod):
+            raise TypeError("LassoRegression must be trained using SubGradientMethod.")
+
+        # --- Preprocess ---
+        X_aug = self._add_bias(X_train)
+        Y_train_col = Y_train.reshape(-1, 1)
+
+        # --- Init weights ---
+        d = X_aug.shape[1]
+        self.W = np.random.randn(d, 1)
+        self.history = []   # store scalar losses ONLY
+
+        # ---------------------------------------------------
+        # Define callbacks for SubGradientMethod.optimize()
+        # ---------------------------------------------------
+        def loss_cb(W_flat):
+            W = W_flat.reshape(-1, 1)
+            E = X_aug @ W - Y_train_col
+
+            mse = 0.5 * np.mean(E**2)
+            l1 = (self.alpha / len(X_aug)) * np.sum(np.abs(W[1:]))
+
+            loss = mse + l1
+            self.history.append(float(loss))  # store scalar loss
+            return float(loss)
+
+        def grad_cb(W_flat):
+            W = W_flat.reshape(-1, 1)
+            E = X_aug @ W - Y_train_col
+
+            mse_grad = (1 / len(X_aug)) * (X_aug.T @ E)
+            l1_grad  = (self.alpha / len(X_aug)) * np.sign(W)
+            l1_grad[0] = 0  # do not penalize bias
+
+            g = mse_grad + l1_grad
+            return g.flatten()
+
+        # ---------------------------------------------------
+        # Run optimizer
+        # ---------------------------------------------------
+        result = optim.optimize(
+            x=self.W.flatten(),
+            func_callback=loss_cb,
+            grad_func_callback=grad_cb,
+            hessian_func_callback=None,
+            is_plot=is_plot
+        )
+
+        # Correctly unpack depending on is_plot flag
+        if is_plot:
+            W_flat, _ = result      # (x_best, path_points)
+        else:
+            W_flat = result         # x_best only
+
+        self.W = W_flat.reshape(-1, 1)

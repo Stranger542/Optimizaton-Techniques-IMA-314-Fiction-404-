@@ -4,42 +4,60 @@ from numpy import ndarray
 from typing import Callable, Dict, Any
 
 def plot_loss_curves(
-    histories: Dict[str, list[ndarray]], 
-    loss_func_callable: Callable[..., float],
+    histories: Dict[str, list],
+    loss_func_callable: Callable[..., float] = None,
     is_log_scale: bool = True
 ):
     """
-    Plots the loss (objective function value) over iterations for
-    multiple optimizers.
-    This is ideal for comparing the convergence speed of optimizers
-    like GD, SGD, and Mini-Batch GD.
-    Args:
-        histories (Dict): A dictionary where keys are optimizer names
-                          (e.g., "GD", "SGD") and values are the list
-                          of weight vectors (the path) from their history.
-        loss_func_callable (Callable): The function to call to compute the
-                                     loss at each point in the history.
-                                     (e.g., a lambda W: loss_func(W, X, Y))
-        is_log_scale (bool): Whether to use a logarithmic scale for the y-axis.
-    """
-    plt.figure(figsize=(10, 6))
-    for name, path in histories.items():
-        try:
-            loss_history = [loss_func_callable(W) for W in path]
-        except Exception as e:
-            print(f"Error computing loss for {name}: {e}")
-            print("Ensure your loss function can accept a single weight vector.")
-            continue
-        plt.plot(loss_history, label=name, alpha=0.8)
+    Universal plotting function for loss curves.
     
-    plt.xlabel("Iteration / Step")
-    plt.ylabel("Loss f(x)" + (" (Log Scale)" if is_log_scale else ""))
-    plt.title("Optimizer Loss Convergence")
-    plt.legend()
+    Supports:
+    - histories of scalar losses (Lasso with subgradient)
+    - histories of weight vectors (GD, SGD, MiniBatchGD)
+    - optional loss_func_callable for weight-vector histories
+
+    Args:
+        histories (Dict[str, list]): mapping name -> history list
+        loss_func_callable (callable or None): 
+            if history contains weights, this computes the loss.
+            if history already contains scalars, this is ignored.
+        is_log_scale (bool): log scale for y-axis
+    """
+
+    plt.figure(figsize=(10, 6))
+
+    for name, path in histories.items():
+
+        # CASE 1: Scalar loss history (e.g., Lasso)
+        if len(path) > 0 and np.isscalar(path[0]):
+            loss_history = path
+
+        # CASE 2: Weight vector history (GD, SGD, etc.)
+        else:
+            if loss_func_callable is None:
+                print(f"[Warning] Cannot compute loss for '{name}' because history contains weights and no loss function was provided.")
+                continue
+
+            try:
+                loss_history = [loss_func_callable(W) for W in path]
+            except Exception as e:
+                print(f"[Error] Loss computation failed for '{name}': {e}")
+                continue
+
+        plt.plot(loss_history, label=name, alpha=0.8)
+
+    # Labels and style
+    plt.xlabel("Iteration")
+    plt.ylabel("Loss" + (" (log scale)" if is_log_scale else ""))
+
     if is_log_scale:
-        plt.yscale('log')
-    plt.grid(True, linestyle='--', alpha=0.5)
+        plt.yscale("log")
+
+    plt.title("Loss Convergence")
+    plt.legend()
+    plt.grid(True, linestyle="--", alpha=0.4)
     plt.show()
+
 
 def plot_contour_comparison(
     func_callable: Callable[[ndarray], float],
