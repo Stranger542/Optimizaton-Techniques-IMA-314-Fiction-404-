@@ -4,17 +4,7 @@ from typing import Callable
 from utils.base import Optim, EPS
 
 class NewtonMethodBase(Optim):
-    """
-    A base class for Newton's optimization methods.
-    This class handles the main optimization loop, including an
-    optional line search to find the step size `alpha`. The core
-    logic of *how* the search direction `delta` is computed is
-    left to the child classes (Pure vs. Damped).
-    Args:
-        line_search (Optim, optional): An optimizer (like BacktrackingLineSearch)
-            to find the optimal step size `alpha` at each iteration.
-            If None, a "pure" step (`alpha=1.0`) is always used.
-    """
+
     def __init__(self, line_search: Optim | None = None) -> None:
         super().__init__()
         self.line_search = line_search
@@ -23,15 +13,7 @@ class NewtonMethodBase(Optim):
         super()._reset()
         return
     def _get_search_direction(self, g: ndarray, H: ndarray) -> ndarray:
-        """
-        Abstract method to compute the search direction `delta`.
-        This is where child classes implement their logic.
-        Args:
-            g (ndarray): The current gradient vector.
-            H (ndarray): The current Hessian matrix.
-        Returns:
-            ndarray: The search direction `delta`.
-        """
+
         raise NotImplementedError("Child class must implement _get_search_direction")
 
     def optimize(
@@ -80,15 +62,7 @@ class NewtonMethodBase(Optim):
         return x
 
 class NewtonMethod(NewtonMethodBase):
-    """
-    Implementation of the standard "pure" Newton's Method.
-    This method computes the search direction `delta` by solving
-    the linear system `H * delta = -g` directly, where `H` is the
-    exact Hessian.
-    This method is very fast (quadratic convergence) near the
-    optimum but can be unstable if the Hessian is not
-    positive definite (i.e., not convex).
-    """
+
 
     def __init__(self, line_search: Optim | None = None) -> None:
         super().__init__(line_search=line_search)
@@ -103,29 +77,12 @@ class NewtonMethod(NewtonMethodBase):
             return np.zeros_like(g) 
 
 class DampedNewtonMethod(NewtonMethodBase):
-    """
-    Implementation of the Damped Newton's Method.
-    This is a modification to make Newton's method more robust
-    when the Hessian `H` is not positive definite.
-    It solves a modified system: `(H + lambda*I) * delta = -g`,
-    where `lambda` is a "damping factor" that ensures
-    the modified Hessian is positive definite and well-conditioned.
-    Args:
-        line_search (Optim, optional): An optimizer for line search.
-        damping_offset (float): A small positive value to add to the
-            damping factor to ensure strict positive definiteness.
-    """
+
     def __init__(self, line_search: Optim | None = None, damping_offset: float = 1e-4) -> None:
         super().__init__(line_search=line_search)
         self.damping_offset = damping_offset
 
     def _get_search_direction(self, g: ndarray, H: ndarray) -> ndarray:
-        """
-        Solves the damped Newton system `(H + lambda*I) * delta = -g`.
-        
-        The damping factor `lambda` is chosen dynamically to be just
-        large enough to make the Hessian positive definite.
-        """
         I = np.identity(H.shape[0])
         lambda_damping = 0.0
 

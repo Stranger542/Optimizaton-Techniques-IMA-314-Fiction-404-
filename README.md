@@ -1,6 +1,6 @@
 # Optimization Algorithms from Scratch
 
-A semester project implementation of various **mathematical optimization algorithms**.  
+A semester project implementation of **mathematical optimization algorithms**.  
 This repository contains the **core Python code** for each algorithm along with **Jupyter Notebooks** demonstrating, visualizing, and comparing their performance.
 
 ---
@@ -14,18 +14,17 @@ This repository contains the **core Python code** for each algorithm along with 
 ---
 
 ## About This Project
-
-This project serves as an **educational exploration** into the field of **numerical optimization**.  
-Based on the *Lecture 1–7* series, it implements foundational optimization algorithms **from scratch** using only **NumPy**.
+ 
+We implement some optimization algorithms **from scratch** using only **NumPy**.
 
 The main objectives are to:
 - Understand the internal working of optimization techniques.
-- Analyze their behavior on test functions (e.g., simple quadratics, non-convex functions).
+- Analyze their behavior on test functions
 - Visualize their convergence trajectories.
 
 The project separates:
-- **Reusable algorithm logic** → in `.py` files  
-- **Experimental analysis & visualization** → in `.ipynb` notebooks  
+- **Reusable algorithm logic**  in `.py` files  
+- **Experimental analysis & visualization**  in `.ipynb` notebooks  
 
 ---
 
@@ -90,21 +89,21 @@ Optimization_Project/
 │   └── non_differentiable.py       # Sub-gradient Method
 │
 ├── notebooks/
-│   ├── 01_Gradient_Descent.ipynb       # Demos for GD, SGD
-│   ├── 02_Momentum_Methods.ipynb       # Demos for Momentum, NAG
-│   ├── 03_Adaptive_Methods.ipynb       # Demos for Adagrad, RMSProp, Adam
-│   ├── 04_Second_Order_Methods.ipynb   # Demos for Newton
-│   ├── 05_Quasi_Newton_Methods.ipynb   # Demos for BFGS, L-BFGS
-│   └── 06_Subgradient_Method.ipynb     # Demo for Lasso
-│   └── Regression_Models.ipynb 
+│   ├── 01_Gradient_Descent       # GD, SGD
+│   ├── 02_Momentum_Methods       # Momentum, NAG
+│   ├── 03_Adaptive_Methods       # Adagrad, RMSProp, Adam
+│   ├── 04_Second_Order_Methods   # Newton, Dampped Newton
+│   ├── 05_Quasi_Newton_Methods   # BFGS, L-BFGS
+│   └── 06_Subgradient_Method     # Lasso
+│   └── 07_Regression_Models         # Linear, ridge , Lasso , Logistic
 │
 ├── utils/
 │   ├── __init__.py
-│   ├── test_functions.py               # Defines test functions and  gradients
-│   └── plot_helpers.py                 # Common plotting utilities
+│   ├── test_functions.py               # Test functions and  gradients
+│   └── plot_helpers.py                 # Common plotting functions
 │
-├── requirements.txt                    # Dependencies
-└── README.md                           # You are here
+├── requirements.txt                    
+└── README.md                           
 ```
 
 ---

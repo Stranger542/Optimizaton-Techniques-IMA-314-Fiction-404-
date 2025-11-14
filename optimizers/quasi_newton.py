@@ -5,16 +5,6 @@ from collections import deque
 from utils.base import Optim, EPS
 
 class BFGS(Optim):
-    """
-    Implementation of the BFGS (Broyden, Fletcher, Goldfarb, Shanno) Algorithm.
-    This is a quasi-Newton method that iteratively builds an approximation
-    of the inverse Hessian matrix, H, using only gradient information.
-    This avoids the computation and inversion of the true Hessian.
-    Args:
-        line_search (Optim): A line search optimizer (e.g., BacktrackingLineSearch)
-            used to find the step size `alpha` at each iteration.
-    """
-
     def __init__(self, line_search: Optim) -> None:
         super().__init__()
         self.line_search = line_search
@@ -86,18 +76,6 @@ class BFGS(Optim):
         return x
 
 class LBFGS(Optim):
-    """
-    Implementation of the Limited-memory BFGS (L-BFGS) Algorithm.
-    L-BFGS is a quasi-Newton method that approximates the BFGS
-    algorithm using only a limited amount of computer memory.
-    It does not store the full n x n inverse Hessian approximation.
-    Instead, it computes the search direction using the "two-loop
-    recursion" based on a history of the last `m` {delta, y} pairs.
-    Args:
-        line_search (Optim): A line search optimizer (e.g., BacktrackingLineSearch).
-        m (int): The memory size, i.e., the number of past {delta, y}
-                 pairs to store.
-    """
     def __init__(self, line_search: Optim, m: int = 10) -> None:
         super().__init__()
         self.line_search = line_search

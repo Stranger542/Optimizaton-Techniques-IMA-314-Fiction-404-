@@ -4,17 +4,7 @@ from typing import Callable
 from utils.base import Optim, EPS
 
 class Adagrad(Optim):
-    """
-    Implementation of the Adagrad (Adaptive Gradient) Algorithm.
-    Adagrad adapts the learning rate for each parameter, performing
-    larger updates for infrequent and smaller updates for frequent
-    parameters. It does this by accumulating the *sum of squared gradients*
-    for each parameter in an archive.
-    Args:
-        alpha (float): The initial (global) learning rate.
-        epsilon (float): A small value for numerical stability,
-                        added to the denominator.
-    """
+
 
     def __init__(self, alpha: float = 0.01, epsilon: float = 1e-8) -> None:
         super().__init__()
@@ -86,16 +76,6 @@ class Adagrad(Optim):
 
 
 class RMSProp(Optim):
-    """
-    Implementation of the RMSProp (Root Mean Square Propagation) Algorithm.
-    RMSProp addresses Adagrad's aggressively diminishing learning rate
-    by using an *Exponentially Weighted Moving Average (EWMA)*
-    for the squared gradients, rather than a simple sum.
-    Args:
-        alpha (float): The learning rate.
-        beta (float): The smoothing parameter for the EWMA (e.g., 0.9).
-        epsilon (float): A small value for numerical stability.
-    """
 
     def __init__(self, alpha: float = 0.001, beta: float = 0.9, epsilon: float = 1e-8) -> None:
         super().__init__()
@@ -168,20 +148,7 @@ class RMSProp(Optim):
         return x
 
 class Adam(Optim):
-    """
-    Implementation of the Adam (Adaptive Moment Estimation) Algorithm.
-    Adam combines the ideas of Momentum (storing an EWMA of the 
-    gradients, or 1st moment) and RMSProp (storing an EWMA of the 
-    squared gradients, or 2nd moment).
-    It also includes a *bias correction* step to account for the
-    fact that the moment accumulators are initialized at zero.
-    
-    Args:
-        alpha (float): The learning rate (e.g., 0.001).
-        beta1 (float): The decay rate for the 1st moment (e.g., 0.9).
-        beta2 (float): The decay rate for the 2nd moment (e.g., 0.99).
-        epsilon (float): A small value for numerical stability.
-    """
+
 
     def __init__(self, alpha: float = 0.001, beta1: float = 0.9, beta2: float = 0.999, epsilon: float = 1e-8) -> None:
         super().__init__()

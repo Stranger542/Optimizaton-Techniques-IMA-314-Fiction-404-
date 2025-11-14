@@ -4,15 +4,7 @@ from typing import Callable
 from utils.base import Optim, EPS
 
 class GradientDescent(Optim):
-    """
-    Implementation of the Batch Gradient Descent (I-Order) Algorithm.
-    This optimizer uses the gradient of the *entire dataset* (a "batch")
-    to compute each step. The gradient is provided by the `grad_func_callback`.
-    Args:
-        alpha (float): The learning rate, controlling the step size.
-        alpha_optim (Optim, optional): An optimizer for performing line search
-                                       to find the best `alpha` at each step.
-    """
+
     def __init__(self, alpha: float = 0.01, alpha_optim: Optim | None = None) -> None:
         super().__init__()
         self.alpha_init = alpha  
@@ -67,15 +59,6 @@ class GradientDescent(Optim):
         return x
 
 class StochasticGradientDescent(Optim):
-    """
-    Implementation of Stochastic Gradient Descent (SGD).
-    This optimizer updates weights using *one data point at a time*.
-    The `optimize` loop is based on epochs, not gradient norm,
-    as the stochastic gradient is noisy and may never reach zero.
-    Args:
-        alpha (float): The learning rate.
-        n_epochs (int): The number of times to loop over the entire dataset.
-    """
     def __init__(self, alpha: float = 0.01, n_epochs: int = 100) -> None:
         super().__init__()
         self.alpha = alpha
@@ -105,13 +88,7 @@ class StochasticGradientDescent(Optim):
         grad_func_callback: Callable | None = None,
         hessian_func_callback: Callable | None = None,
     ) -> ndarray | tuple[ndarray, list[ndarray]]:
-        """
-        Runs the iterative SGD process for a fixed number of epochs.
-        Args:
-            x (ndarray): The initial weight vector `W`.
-            X (ndarray): The *full* (augmented) feature matrix.
-            Y (ndarray): The *full* target vector.
-        """
+
         W = x.copy()
         plot_points: list[ndarray] = [W]
         N = X.shape[0]
@@ -136,15 +113,7 @@ class StochasticGradientDescent(Optim):
         return W
 
 class MiniBatchGradientDescent(Optim):
-    """
-    Implementation of Mini-Batch Gradient Descent.
-    Updates weights using a small batch of data at a time.
-    This is a common and practical compromise between Batch GD and SGD.
-    Args:
-        alpha (float): The learning rate.
-        n_epochs (int): The number of times to loop over the entire dataset.
-        batch_size (int): The size of each mini-batch.
-    """
+
     def __init__(self, alpha: float = 0.01, n_epochs: int = 100, batch_size: int = 32) -> None:
         super().__init__()
         self.alpha = alpha
@@ -175,13 +144,7 @@ class MiniBatchGradientDescent(Optim):
         grad_func_callback: Callable | None = None,
         hessian_func_callback: Callable | None = None,
     ) -> ndarray | tuple[ndarray, list[ndarray]]:
-        """
-        Runs the iterative mini-batch process for a fixed number of epochs.
-        Args:
-            x (ndarray): The initial weight vector `W`.
-            X (ndarray): The *full* (augmented) feature matrix.
-            Y (ndarray): The *full* target vector.
-        """
+
         W = x.copy()
         plot_points: list[ndarray] = [W]
         N = X.shape[0]

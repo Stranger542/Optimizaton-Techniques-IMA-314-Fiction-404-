@@ -4,23 +4,6 @@ from typing import Callable, Literal
 from utils.base import Optim, EPS
 
 class SubGradientMethod(Optim):
-    """
-    Implementation of the Sub-gradient Method.
-    This optimizer is designed for non-differentiable convex functions.
-    It uses a sub-gradient (g) instead of a gradient at points
-    where the function is not differentiable.
-    Key characteristics:
-    - It is not a descent method; an update can increase the function value.
-    - It typically runs for a fixed number of iterations.
-    - It often uses a diminishing step size to guarantee convergence.
-
-    Args:
-        alpha (float): The initial learning rate (alpha_0).
-        n_iterations (int): The total number of iterations to run.
-        policy (str): The step size policy.
-            - 'fixed': Uses a constant step size `alpha`.
-            - 'diminishing': Uses a step size `alpha / (k + 1)`.
-    """
 
     def __init__(
         self, 

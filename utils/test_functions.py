@@ -121,7 +121,6 @@ def piecewise_linear_func(x: ndarray) -> float:
 
 def piecewise_linear_subgrad(x: ndarray) -> ndarray:
     """
-    Returns *a* valid sub-gradient for f(x, y) = |x| + 2*|y|.
     The sub-differential at x=0 is the interval [-1, 1].
     The sub-differential at y=0 is the interval [-2, 2].
     """
@@ -138,15 +137,6 @@ PiecewiseLinear = Function(
 
 
 def generate_linear_regression_data(N: int = 100, d: int = 1):
-    """
-    Generates synthetic data for linear regression.
-    
-    Returns:
-        tuple: (X_aug, Y, W_true)
-            X_aug (ndarray): Augmented feature matrix (N x d+1)
-            Y (ndarray): Target vector (N x 1)
-            W_true (ndarray): The true underlying weights (d+1 x 1)
-    """
     W_true = np.random.randn(d + 1, 1)
     X = np.random.rand(N, d)
     X_aug = np.hstack([np.ones((N, 1)), X])
@@ -155,20 +145,12 @@ def generate_linear_regression_data(N: int = 100, d: int = 1):
     return X_aug, Y, W_true
 
 def linear_regression_loss(W: ndarray, X: ndarray, Y: ndarray) -> float:
-    """
-    Computes the Mean Squared Error (MSE) loss for linear regression.
-    L(W) = (1 / 2N) * ||XW - Y||^2
-    """
     N = X.shape[0]
     E = X @ W - Y
     loss = (1 / (2 * N)) * (E.T @ E)
     return loss.item()
 
 def linear_regression_gradient(W: ndarray, X: ndarray, Y: ndarray) -> ndarray:
-    """
-    Computes the full batch gradient of the MSE loss.
-    grad L(W) = (1 / N) * X.T * (XW - Y)
-    """
     N = X.shape[0]
     E = X @ W - Y
     gradient = (1 / N) * X.T @ E
@@ -176,20 +158,7 @@ def linear_regression_gradient(W: ndarray, X: ndarray, Y: ndarray) -> ndarray:
 
 
 def generate_logistic_regression_data(N: int = 200, d: int = 2):
-    """
-    Generates synthetic 2D data for binary classification.
-    
-    Creates two distinct "blobs" of data points.
-    
-    Args:
-        N (int): Total number of data points.
-        d (int): Number of features (must be 2 for this function).
-        
-    Returns:
-        tuple: (X, Y)
-            X (ndarray): Feature matrix (N x d)
-            Y (ndarray): Target vector (N x 1)
-    """
+
     if d != 2:
         raise ValueError("This specific generator only supports d=2.")
         

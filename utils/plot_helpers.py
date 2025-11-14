@@ -3,26 +3,7 @@ import matplotlib.pyplot as plt
 from numpy import ndarray
 from typing import Callable, Dict, Any
 
-def plot_loss_curves(
-    histories: Dict[str, list],
-    loss_func_callable: Callable[..., float] = None,
-    is_log_scale: bool = True
-):
-    """
-    Universal plotting function for loss curves.
-    
-    Supports:
-    - histories of scalar losses (Lasso with subgradient)
-    - histories of weight vectors (GD, SGD, MiniBatchGD)
-    - optional loss_func_callable for weight-vector histories
-
-    Args:
-        histories (Dict[str, list]): mapping name -> history list
-        loss_func_callable (callable or None): 
-            if history contains weights, this computes the loss.
-            if history already contains scalars, this is ignored.
-        is_log_scale (bool): log scale for y-axis
-    """
+def plot_loss_curves(histories: Dict[str, list],loss_func_callable: Callable[..., float] = None,is_log_scale: bool = True):
 
     plt.figure(figsize=(10, 6))
 
@@ -59,25 +40,7 @@ def plot_loss_curves(
     plt.show()
 
 
-def plot_contour_comparison(
-    func_callable: Callable[[ndarray], float],
-    histories: Dict[str, list[ndarray]], 
-    x_range: tuple[float, float] = (-2, 2),
-    y_range: tuple[float, float] = (-2, 2),
-    title: str = "Optimizer Path Comparison"
-):
-    """
-    Creates a 2D contour plot of a function and plots the
-    optimization paths for multiple optimizers on the same graph.
-    Args:
-        func_callable (Callable): The 2D function to plot (e.g., Rosenbrock.func).
-        histories (Dict): A dictionary where keys are optimizer names
-                          (e.g., "Momentum", "Adam") and values are
-                          the list of points [x, y] in their path.
-        x_range (tuple): The plotting range for the x-axis.
-        y_range (tuple): The plotting range for the y-axis.
-        title (str): The title for the plot.
-    """
+def plot_contour_comparison(func_callable: Callable[[ndarray], float],histories: Dict[str, list[ndarray]], x_range: tuple[float, float] = (-2, 2),y_range: tuple[float, float] = (-2, 2),title: str = "Optimizer Path Comparison"):
     plt.figure(figsize=(12, 9))
     x_lin = np.linspace(x_range[0], x_range[1], 100)
     y_lin = np.linspace(y_range[0], y_range[1], 100)
@@ -113,16 +76,6 @@ def plot_decision_boundary(
     Y: ndarray, 
     title: str = "Decision Boundary"
 ):
-    """
-    Plots the decision boundary for a binary classification model.
-    Only works for 2D feature data.
-
-    Args:
-        model: A trained model object that has a `.predict()` method.
-        X (ndarray): The feature data (N x 2).
-        Y (ndarray): The true labels (N x 1).
-        title (str): The title for the plot.
-    """
     if X.shape[1] != 2:
         print("Warning: Cannot plot decision boundary for non-2D data. Skipping plot.")
         return
