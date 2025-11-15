@@ -118,32 +118,9 @@ git clone https://github.com/your-username/Optimization_Project.git
 cd Optimization_Project
 ```
 
-### 2. Create a Virtual Environment
-It’s recommended to use a virtual environment for dependency management.
 
-**On macOS/Linux**
-```bash
-python3 -m venv venv
-```
 
-**On Windows**
-```bash
-python -m venv venv
-```
-
-### 3. Activate the Virtual Environment
-
-**On macOS/Linux**
-```bash
-source venv/bin/activate
-```
-
-**On Windows**
-```bash
-.env\Scriptsctivate
-```
-
-### 4. Install Required Libraries
+### 2. Install Required Libraries
 Install dependencies from the `requirements.txt` file:
 ```bash
 pip install -r requirements.txt
@@ -157,51 +134,12 @@ jupyter
 scipy
 ```
 
-> 💡 *Note:* `scipy` is included for benchmarking your implementations against `scipy.optimize`.
-
----
-
-## Running the Experiments
-
-All experiments and visualizations are available in **Jupyter Notebooks**.
-
-### Step 1. Start the Jupyter Notebook Server
-```bash
-jupyter notebook
-```
-A new browser tab will open automatically.
-
-### Step 2. Open the Notebooks
-Navigate to the `notebooks/` folder in the Jupyter interface.
-
-### Step 3. Run Experiments
-Open any notebook (e.g., `01_Gradient_Descent.ipynb`) and execute cells using:
-```
-Shift + Enter
-```
-
-You’ll see:
-- Test function setup  
-- Optimizer import from the `optimizers/` module  
-- 2D contour visualizations of convergence paths  
-- Comparisons between algorithms (e.g., GD vs. Momentum)  
-
----
-
 ## Example Visualization
 
 Each notebook provides contour plots and convergence traces like:
 
 - Gradient paths toward minima  
-- Comparison of learning rate effects  
 - Momentum trajectory smoothing  
 - Adaptive methods vs. fixed learning rates  
 
----
 
-## License
-
-This project is developed for educational purposes as part of an academic semester project.  
-Feel free to use or adapt for learning and research purposes with proper credit.
-
----
